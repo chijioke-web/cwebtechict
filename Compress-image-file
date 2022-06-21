@@ -1,0 +1,38 @@
+<?php
+if(isset($_POST['upload'])){
+
+      $imagename   = $_FILES['upload_image']['name'];
+      $allowed_extension  = array('png','jpeg','jpg');  
+      $path  = "uploads/".$imagename   ;  
+     $extension   = pathinfo($location, PATHINFO_EXTENSION);
+ 
+    if(in_array($allowed_extension,$extension   )){  
+    //Compress Image Code
+      compressImage($_FILES['upload_image']['tmp_name'],$path ,70);  
+    }else{
+      echo "Invalid file type.";
+    }
+  }
+  
+  // Compress image
+  function compressImage($source, $destination, $quality) {  
+    $info = getimagesize($source);
+    if ($info['mime'] == 'image/jpeg') 
+      $image = imagecreatefromjpeg($source);  
+    elseif ($info['mime'] == 'image/gif') 
+      $image = imagecreatefromgif($source);  
+    elseif ($info['mime'] == 'image/png') 
+      $image = imagecreatefrompng($source);  
+    imagejpeg($image, $destination, $quality);    
+  }
+?>
+
+
+<html>
+<body>
+<form method='post' action='' enctype='multipart/form-data'>
+  <input type='file' name='upload_image' >
+  <input type='submit' value='Upload' name='upload'> 
+</form>
+</body>
+</html>
